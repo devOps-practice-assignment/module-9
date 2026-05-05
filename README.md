@@ -1,50 +1,59 @@
+## Assignment 9 Submission
 
+- Name: Md Khayrul Hasan
+- Submission date: 5 May 2026
+- GitHub repo: https://github.com/devOps-practice-assignment/module-9.git
+- DockerHub image: https://hub.docker.com/repository/docker/khayrul/module-3-deployment-app/tags
+- PDF: Assignment_9_Docker_Docker_Compose_Submission.pdf
 
-## Prerequisites
+## App Overview
 
-- Node Version 22
- 
+- Routes:
+  - `/` returns an HTML page
+  - `/api` returns JSON
+- Default port:
+  - Local Node: `PORT` env var or `5000`
 
-### 1. For Run This Applications
+## Run Locally (Node)
+
+Prerequisite: Node 22
+
 ```bash
-# install packages
-npm install 
-
-# Testing The Applications
-npm check
-
-# For Run the application
+npm install
+npm run check
 npm start
 ```
 
+Open:
+- http://localhost:5000/
+- http://localhost:5000/api
 
-### Deployment Process
-1. **Cleanup**: Removes existing process if running
-   ```bash
-   pm2 delete node-app || true
-   ```
+## Run with Docker Compose (Nginx + Express)
 
-2. **Start Application**: Launches with absolute path
-   ```bash
-   pm2 start "./src/server.js" --name node-app
-   ```
+This setup runs:
+- Nginx from an official image (`nginx:alpine`)
+- Express app built from the provided `Dockerfile`
+- Public access on port `8080` (Nginx reverse-proxies to the Express container)
 
-3. **Save Process List**: Persists PM2 configuration
-   ```bash
-   pm2 save
-   ```
+```bash
+docker compose up --build -d
+docker compose ps
+```
 
-### About The Applications
-1. **Route**: This Application has 2 route
-   ```bash
-   / # this will show a hello world page
-   ```
-      ```bash
-   /api # this will response a json
-   ```
+Open:
+- http://localhost:8080/
+- http://localhost:8080/api
 
-2. **Default Port**: By Default this application will run on port 3000
+Stop:
+```bash
+docker compose down
+```
 
+## Push Image to DockerHub
 
-
-# module-9
+```bash
+docker login
+docker images
+docker tag module-3-deployment-app:latest khayrul/module-3-deployment-app:latest
+docker push khayrul/module-3-deployment-app:latest
+```
